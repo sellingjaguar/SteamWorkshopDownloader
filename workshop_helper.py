@@ -13,12 +13,14 @@ class WorkshopHelper:
         tree = html.fromstring(r.content)
         elem = tree.xpath('//*[@id="ig_bottom"]/div[3]/a[1]')
         elem_txt = elem[0].get('href')
+        #Get the numbers present in the href link for the game page
         game_id = re.search(r'\d+$', elem_txt).group()
 
         return game_id
     
     def getItemId(self, url):
-        item_id = re.search(r'\d+$', url).group()
+        #Match numbers between "id=" and either the string end or a & (in case of the GET variable for search)
+        item_id = re.search(r'(?!id=)\d+($|(?=&))', url).group()
 
         return item_id
     
