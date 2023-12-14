@@ -1,5 +1,18 @@
 import sys
 from workshop_helper import WorkshopHelper
+import configparser
+
+#Prepare configs in case there isn't a config file
+config = configparser.ConfigParser()
+
+if config.read("config.ini") == []:
+    print("No config file, let's create one...")
+    config.add_section('SETTINGS')
+    config.set('SETTINGS', 'steamcmd_dir', input("SteamCMD folder directory: "))
+    config.set('SETTINGS', 'output_dir', input("Output directory: "))
+
+    with open('config.ini', 'w') as configfile:
+        config.write(configfile)
 
 link = ""
 if len(sys.argv) > 1:
@@ -7,13 +20,5 @@ if len(sys.argv) > 1:
 else:
     link = input("Workshop page url: ")
 
-#get game ID
-helper = WorkshopHelper()
-
-game_id = helper.getGameId(link)
-
-#get item ID
-item_id = helper.getItemId(link)
-
 #run steam cmd
-helper.downloadItem(game_id, item_id)
+WorkshopHelper().downloadItem(link)
