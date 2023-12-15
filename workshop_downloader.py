@@ -1,6 +1,8 @@
 import sys
 from workshop_helper import WorkshopHelper
 import configparser
+import PySimpleGUI as gui
+from time import sleep
 
 #Prepare configs in case there isn't a config file
 config = configparser.ConfigParser()
@@ -21,5 +23,61 @@ if len(sys.argv) > 1:
     WorkshopHelper().downloadItem(sys.argv[1:])
 #Use GUI
 else:
-    link = input("Workshop page url: ")
-    WorkshopHelper().downloadItem(link)
+
+    #Download area part
+    mod_download = [
+        [
+            gui.Text('Mod link'),
+            gui.In(key='-MOD LINK-', do_not_clear=False),
+            gui.Button('Download', key='-DOWNLOAD-')
+        ],
+        [
+            gui.Text('Waiting download...', key='-STATUS-')
+        ]
+    ]
+
+    settings = [
+        [
+            gui.Text('Settings')
+        ],
+        [
+            gui.Text('SteamCMD:'),
+            gui.Text(config["SETTINGS"]["steamcmd_dir"]),
+            gui.Button('Change', key='-CHANGE STEAMCMD-')
+        ],
+        [
+            gui.Text('Output:'),
+            gui.Text(config["SETTINGS"]["output_dir"]),
+            gui.Button('Change', key='-CHANGE OUTPUT-')
+        ]
+    ]
+
+    layout = [
+        [mod_download],
+        [gui.HSeparator()],
+        [settings]
+    ]
+
+    window = gui.Window('Workshop downloader',layout)
+
+    while True:
+        event, values = window.read()
+        if event == "Exit" or event == gui.WIN_CLOSED:
+            break
+
+        #Download events
+        if event == '-DOWNLOAD-':
+            try:
+                WorkshopHelper().downloadItem(values['-MOD LINK-'])
+                window['-STATUS-'].update('Download successful.')
+            except:
+                window['-STATUS-'].update('Download failed, check your mod link again.')
+
+        #Settings events
+        elif event == '-CHANGE STEAMCMD-':
+            pass
+        elif event == '-CHANGE OUTPUT-':
+            pass
+
+    #link = input("Workshop page url: ")
+    #WorkshopHelper().downloadItem(link)
