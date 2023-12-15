@@ -34,8 +34,12 @@ class WorkshopHelper:
 
         #Using link
         if len(args) == 1:
-            game_id = self.getGameId(args[0][0])
-            item_id = self.getItemId(args[0][0])
+            if type(args[0]) is str:
+                game_id = self.getGameId(args[0])
+                item_id = self.getItemId(args[0])
+            else:
+                game_id = self.getGameId(args[0][0])
+                item_id = self.getItemId(args[0][0])
         
         #Using id's
         else:
