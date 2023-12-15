@@ -2,7 +2,6 @@ import sys
 from workshop_helper import WorkshopHelper
 import configparser
 import PySimpleGUI as gui
-from time import sleep
 
 #Prepare configs in case there isn't a config file
 config = configparser.ConfigParser()
