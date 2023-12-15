@@ -2,6 +2,10 @@ import sys
 from workshop_helper import WorkshopHelper
 import configparser
 import PySimpleGUI as gui
+from tkinter import filedialog
+
+def select_folder():
+    return filedialog.askdirectory().replace('/', '\\')
 
 #Prepare configs in case there isn't a config file
 config = configparser.ConfigParser()
@@ -41,12 +45,12 @@ else:
         ],
         [
             gui.Text('SteamCMD:'),
-            gui.Text(config["SETTINGS"]["steamcmd_dir"]),
+            gui.Text(config["SETTINGS"]["steamcmd_dir"], key='-STEAMCMD-'),
             gui.Button('Change', key='-CHANGE STEAMCMD-')
         ],
         [
             gui.Text('Output:'),
-            gui.Text(config["SETTINGS"]["output_dir"]),
+            gui.Text(config["SETTINGS"]["output_dir"],  key='-OUTPUT-'),
             gui.Button('Change', key='-CHANGE OUTPUT-')
         ]
     ]
@@ -71,9 +75,17 @@ else:
                 window['-STATUS-'].update('Download successful.')
             except:
                 window['-STATUS-'].update('Download failed, check your mod link again.')
-
+        
         #Settings events
         elif event == '-CHANGE STEAMCMD-':
-            pass
+            folder_path = select_folder()
+            window['-STEAMCMD-'].update(folder_path)
+            config.set('SETTINGS', 'steamcmd_dir', folder_path)
         elif event == '-CHANGE OUTPUT-':
-            pass
+            folder_path = select_folder()
+            window['-OUTPUT-'].update(folder_path)
+            config.set('SETTINGS', 'output_dir', folder_path)
+        
+        #Save configs
+        with open('config.ini', 'w') as configfile:
+            config.write(configfile)
