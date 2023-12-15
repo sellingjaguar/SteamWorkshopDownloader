@@ -6,4 +6,5 @@ workshop_helper.py is not meant to be ran by the user, it only contains useful f
 
 TO-DO:
 - [ ] Support non-anonymous login
-- [ ] GUI
+- [X] GUI
+- [ ] Status error catching
