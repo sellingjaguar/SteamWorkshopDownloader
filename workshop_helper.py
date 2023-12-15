@@ -34,8 +34,8 @@ class WorkshopHelper:
 
         #Using link
         if len(args) == 1:
-            game_id = self.getGameId(args[0])
-            item_id = self.getItemId(args[0])
+            game_id = self.getGameId(args[0][0])
+            item_id = self.getItemId(args[0][0])
         
         #Using id's
         else:
@@ -60,6 +60,9 @@ class WorkshopHelper:
 
         subprocess.run(command)
 
-        #Move downloaded file to output folder
-        shutil.move(f'{self.steamcmd_dir}\steamapps\workshop\content\{game_id}', self.output_dir)
+        #Copy downloaded directory to output folder
+        shutil.copytree(f'{self.steamcmd_dir}\steamapps\workshop\content\{game_id}', f'{self.output_dir}\{game_id}', dirs_exist_ok=True)
+
+        #Delete steamCMD directory to avoid duplicates occupying disk space
+        shutil.rmtree(f'{self.steamcmd_dir}\steamapps\workshop\content')
 

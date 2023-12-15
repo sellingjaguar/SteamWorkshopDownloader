@@ -14,11 +14,12 @@ if config.read("config.ini") == []:
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
 
-link = ""
+#Being ran via command, supports both links or ID's
 if len(sys.argv) > 1:
-    link = sys.argv[1]
+    if len(sys.argv) > 3: 
+        raise("Invalid arguments, must be either a link or the game ID followed by the item ID.")
+    WorkshopHelper().downloadItem(sys.argv[1:])
+#Use GUI
 else:
     link = input("Workshop page url: ")
-
-#run steam cmd
-WorkshopHelper().downloadItem(link)
+    WorkshopHelper().downloadItem(link)
