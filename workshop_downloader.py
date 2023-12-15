@@ -78,6 +78,3 @@ else:
             pass
         elif event == '-CHANGE OUTPUT-':
             pass
-
-    #link = input("Workshop page url: ")
-    #WorkshopHelper().downloadItem(link)
